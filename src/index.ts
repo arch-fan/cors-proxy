@@ -27,6 +27,29 @@ export interface Env {
 
 export default {
 	async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
-		return new Response('Hello World!');
+		const reqUrl = new URL(request.url);
+		const dynPath = reqUrl.pathname.substring(1);
+
+		const res = await fetch(dynPath, {
+			method: request.method,
+			headers: request.headers,
+			body: request.body,
+		});
+
+		const headers: Headers = new Headers({
+			'Access-Control-Allow-Origin': '*',
+			'Access-Control-Allow-Methods': '*',
+			'Access-Control-Allow-Headers': '*',
+		});
+
+		for (const [key, value] of res.headers.entries()) {
+			headers.set(key, value);
+		}
+
+		console.log(headers);
+
+		return new Response(res.body as any, {
+			headers,
+		});
 	},
 };
