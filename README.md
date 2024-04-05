@@ -3,5 +3,5 @@
 To deploy it just run
 
 ```bash
-pnpm install & pnpm run deploy
+pnpm install && pnpm run deploy
 ```
